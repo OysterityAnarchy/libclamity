@@ -1,0 +1,11 @@
+# libclamity
+This is a dragonfire CSM (might work partly with vanilla minetest as well) that includes utilities to make clientmods specifically for Clamity Anarchy and it's modset.
+
+Current features:
+- Chat message parsing
+
+Planned features:
+- Death message parsing
+- Parsing of /me output
+- Get / set skin
+- Badge parsing
