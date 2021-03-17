@@ -1,4 +1,6 @@
-local libclamity = {}
+libclamity = {
+	registered_on_chat_message = {},
+}
 
 function libclamity.parse_chat_message(rawmsg)
 	local msg = minetest.strip_colors(rawmsg)
@@ -13,10 +15,20 @@ function libclamity.parse_chat_message(rawmsg)
 		end
 		local message = msg:sub(sidx, #msg)
 		local discord = first_byte == 27 and rawmsg:sub(2, 12) == "(c@#63d269)" and nameidx == 1
-		return {
-			player = player,
-			message = message,
-			discord = discord,
-		}
+		return player, message, discord
 	end
 end
+
+function libclamity.register_on_chat_message(func)
+	table.insert(libclamity.registered_on_chat_message, func)
+end
+
+minetest.register_on_receiving_chat_message(function(rawmsg)
+	local player, message, discord = libclamity.parse_chat_message(rawmsg)
+
+	if player then
+		for _, func in ipairs(libclamity.registered_on_chat_message) do
+			func(player, message, discord)
+		end
+	end
+end)
