@@ -8,6 +8,7 @@ function libclamity.parse_chat_message(rawmsg)
 	local first_byte = rawmsg:byte(1)
 	if nameidx and (first_byte == 60 or first_byte == 27) then
 		local idx = msg:find(">")
+		if not idx then return end
 		local player = msg:sub(nameidx + 1, idx - 1)
 		local message = msg:sub(idx + 3, #msg)
 		local discord = first_byte == 27 and rawmsg:sub(2, 20) == "(c@#5583e1)Discord|" and nameidx == 9
